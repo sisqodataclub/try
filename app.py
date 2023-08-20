@@ -3,6 +3,7 @@ import streamlit as st
 from google.auth import exceptions
 from google.auth.credentials import Credentials
 from googleapiclient.discovery import build
+from google.oauth2 import service_account
 
 # Load the service account JSON key data from environment variable
 service_account_json = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
