@@ -4,19 +4,14 @@ from google.auth import exceptions
 from google.auth.credentials import Credentials
 from googleapiclient.discovery import build
 
-# Load credentials from the environment variable
-try:
-    credentials = Credentials.from_authorized_user_info(
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS']
-    )
-except exceptions.DefaultCredentialsError:
-    st.write("Failed to load credentials.")
+# Load the service account JSON key data from environment variable
+service_account_json = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 
-# Now you can use the credentials to access Google services
-service = build('sheets', 'v4', credentials=credentials)
+# Load credentials from the service account JSON key data
+credentials = service_account.Credentials.from_service_account_info(
+    service_account_json,
+    scopes=['https://www.googleapis.com/auth/cloud-platform']
+)
 
-# Example: Print the list of spreadsheets
-spreadsheet_list = service.spreadsheets().list().execute()
-st.write("Spreadsheets:")
-for sheet in spreadsheet_list.get('files', []):
-    st.write(f"- {sheet['name']}")
+# Create a service client using the credentials
+service = build('sheets', 'v1', credentials=credentials)
